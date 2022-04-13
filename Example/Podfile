@@ -1,0 +1,11 @@
+platform :ios, '10.0'
+
+target 'FSFunctionStatistics_Example' do
+  pod 'FSFunctionStatistics', :path => '../'
+
+  target 'FSFunctionStatistics_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end

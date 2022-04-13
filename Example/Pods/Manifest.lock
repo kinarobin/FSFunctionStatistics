@@ -1,0 +1,16 @@
+PODS:
+  - FSFunctionStatistics (1.0.0)
+
+DEPENDENCIES:
+  - FSFunctionStatistics (from `../`)
+
+EXTERNAL SOURCES:
+  FSFunctionStatistics:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  FSFunctionStatistics: d1e1c7b9584557e8ec98ed39062fbc3896bf30fd
+
+PODFILE CHECKSUM: 83c853692cc2779f42672aee31588244b458844c
+
+COCOAPODS: 1.11.2

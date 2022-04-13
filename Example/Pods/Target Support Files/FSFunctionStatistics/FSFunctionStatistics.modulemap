@@ -1,0 +1,6 @@
+framework module FSFunctionStatistics {
+  umbrella header "FSFunctionStatistics-umbrella.h"
+
+  export *
+  module * { export * }
+}

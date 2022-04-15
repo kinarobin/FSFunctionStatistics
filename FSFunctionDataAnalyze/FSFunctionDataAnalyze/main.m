@@ -13,23 +13,27 @@
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
         if (argc < 4) {
-            [NSException raise:@"用法有误！" format:@"argv[0]：需要解析的数据 argv[1]：dsym符号文件 argv[2]：输出的文件"];
+            [NSException raise:@"用法有误！" format:@"0：需要解析的数据 1：dsym符号文件 2：输出的文件"];
         }
-        const char *filePath = argv[1];
-        const char *symPath = argv[2];
-        const char *outputPath = argv[3];
-        if (![NSFileManager.defaultManager fileExistsAtPath:@(filePath)]) {
-            [NSException raise:@"需要解析的文件不存在" format:@""];
+        NSURL *filePathURL = [NSURL fileURLWithPath:@(argv[1])];
+        NSURL *symPath = [NSURL fileURLWithPath:@(argv[2])];
+        NSURL *outputURL = [NSURL fileURLWithPath:@(argv[3])];
+        
+        if (access(filePathURL.path.UTF8String, F_OK) == -1) {
+            printf("analyze file not exist:%s\n", filePathURL.path.UTF8String);
+            abort();
         }
-        if (![NSFileManager.defaultManager fileExistsAtPath:@(symPath)]) {
-            [NSException raise:@"dsym符号文件不存在" format:@""];
+        
+        if (access(symPath.path.UTF8String, F_OK) == -1) {
+            printf("dsym file not exist:%s\n", symPath.path.UTF8String);
+            abort();
         }
         
         int pointLength = sizeof(void *);
         int int64Length = sizeof(int64_t);
         int int32Length = sizeof(int32_t);
         
-        NSData *analyzeData = [NSData dataWithContentsOfFile:@(filePath)];
+        NSData *analyzeData = [NSData dataWithContentsOfURL:filePathURL];
         if ((analyzeData.length - pointLength) % 24 != 0) {
             [NSException raise:@"需要解析的数据有错误，请检查" format:@""];
         }
@@ -70,19 +74,21 @@ int main(int argc, const char * argv[]) {
             
         } while (offset < analyzeData.length);
         
-        FSFuncProcessor *funcProcessor = [[FSFuncProcessor alloc] initWithFunctionRecords:functionRecords imageSlider:imageSlide dsymPath:@(symPath)];
+        FSFuncProcessor *funcProcessor =
+            [[FSFuncProcessor alloc] initWithFunctionRecords:functionRecords
+                                                 imageSlider:imageSlide
+                                                    dsymPath:symPath.path];
         NSArray *resules = [funcProcessor process];
         
         FSFuncDataFotmator *dataFotmator = FSFuncDataFotmator.new;
         NSData *data = [dataFotmator formatDataWithRecords:resules];
         
-        NSURL *outputURl = [NSURL fileURLWithPath:@(outputPath)];
         NSError *error;
-        [data writeToURL:outputURl options:0 error:&error];
+        [data writeToURL:outputURL options:0 error:&error];
         if (error) {
-            NSLog(@"WriteToURL error : %@", error);
+            printf("WriteToURL error : %s\n", error.description.UTF8String);
         } else {
-            printf("analyze sucess! output:%s\n", outputPath);
+            printf("analyze sucess! output:%s\n", outputURL.path.UTF8String);
         }
     }
     return 0;

@@ -40,8 +40,7 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6B2578E82806CEBD005B4743"
@@ -49,7 +48,7 @@
             BlueprintName = "FSFunctionDataAnalyze"
             ReferencedContainer = "container:FSFunctionDataAnalyze.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
